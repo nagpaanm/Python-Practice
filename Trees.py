@@ -44,8 +44,92 @@ class Tree:
         self.value = value
         # copy children if not None
         self.children = children.copy() if children else []
+    
+    def __repr__(self):
+        """
+        Return the representation of Tree (self) as a string that can
+        be evaluated into an equivalent Tree.
         
-
+        :rtype: str
+        
+        >>> t1 = Tree(5)
+        >>> t1
+        Tree(5)
+        >>> t2 = Tree(7, [t1])
+        >>> t2
+        Tree(7, [Tree(5)])
+        """
+        # Our __repr__ is recursive, because it can also be called
+        # via repr...!
+        return ('Tree({}, {})'.format(repr(self.value), repr(self.children)) 
+                if self.children
+                else 'Tree({})'.format(repr(self.value)))
+    
+    def __eq__(self, other):
+        """
+        Return whether this Tree is equivalent to other.
+        
+        :param other: object to compare to self
+        :type other: object Tree
+        :rtype: bool
+        
+        >>> t1 = Tree(5)
+        >>> t2 = Tree(5, [])
+        >>> t1 == t2
+        True
+        >>> t3 = Tree(5, [t1])
+        >>> t2 == t3
+        False
+        """
+        return (type(self) is type(other) and 
+                self.value == other.value and 
+                self.children == other.children)
+        
+    def __str__(self, indent=0):
+        """
+        Produce a user-friendly string representation of Tree self,
+        indenting each level as a visual clue.
+        
+        :param indent: amount to indent each level of tree
+        :type indent: int
+        :rtype: str
+        
+        >>> t = Tree(17)
+        >>> print(t)
+        17
+        >>> t1 = Tree(19, [t, Tree(23)])
+        >>> print(t1)
+        19
+           17
+           23
+        >>> t3 = Tree(29, [Tree(31), t1])
+        >>> print(t3)
+        29
+           31
+           19
+              17
+              23
+        """
+        root_str = indent * " " + str(self.value)
+        return '\n'.join([root_str] + 
+                         [c.__str__(indent + 3) for c in self.children])
+        
+    def __contains__(self, v):
+        """
+        Return whether Tree self contains v.
+        
+        :param v: value to search this tree for
+        :type v: object
+        
+        >>> t = Tree(17)
+        >>> t.__contains__(17)
+        True
+        """
+        if len(self.children) == 0:
+            return self.value == v
+        else:
+            return self.value == v or any([v in x for x in self.children])
+        
 def leaf_count(t):
     """
     Return the number of leaves in Tree t.
@@ -89,6 +173,9 @@ def count(t):
     return 1 + sum([count(c) for c in t.children])
 
 if __name__ == '__main__':
+    import doctest
+    
+    doctest.testmod()
     tree2 = Tree(2)
     tree3 = Tree(3)
     tree4 = Tree(4)
