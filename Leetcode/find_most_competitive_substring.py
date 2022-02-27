@@ -26,15 +26,19 @@ class Solution:
         if(k == len(nums)):
             return nums
         while(len(output) < k):
-            index = self.find_lowest(nums, index, m)
+            index = self.find_lowest(nums, index)
             output.append(nums[index])
             m -= 1
         return output
     
     def find_lowest(self, list1, index, m):
-        smallest = 1000000000
+        smallest = 10000000001
         for i in range(index + 1, len(list1)):
+            if(list1[i] == 0 and len(list1) - i >= m):
+                return i
             if(list1[i] < smallest and len(list1) - i >= m):
                 smallest = list1[i]
                 index = i
+            if(len(list1) - i < m):
+                break
         return index
