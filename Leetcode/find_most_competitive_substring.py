@@ -17,7 +17,6 @@ a has a number less than the corresponding number in b. For example, [1,3,4] is
 more competitive than [1,3,5] because the first position they differ is at the 
 final number, and 4 is less than 5.
 """
-
 class Solution:
     def mostCompetitive(self, nums: List[int], k: int) -> List[int]:
         output = []
