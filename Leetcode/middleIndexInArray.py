@@ -1,5 +1,4 @@
 # O(n^2)
-
 class Solution(object):
     def findMiddleIndex(self, nums):
         """
